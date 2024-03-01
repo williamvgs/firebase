@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display JSON</title>
+  <style>
+    /* Add your custom styles here */
+    pre {
+      white-space: pre-wrap;
+      font-family: monospace;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Formatted JSON</h1>
+
+<pre id="jsonOutput"></pre>
+
+<script>
+  // Fetch JSON data from the Flask server
+  fetch('http://127.0.0.1:5000/display')
+    .then(response => response.json())
+    .then(jsonData => {
+      // Convert JSON data to a string with indentation
+      var formattedJson = JSON.stringify(jsonData,null, 1);
+
+      // Display the formatted JSON in the <pre> element
+      document.getElementById('jsonOutput').textContent = formattedJson;
+    })
+    .catch(error => console.error('Error fetching data:', error));
+</script>
+
+</body>
+</html>
