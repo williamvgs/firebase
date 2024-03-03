@@ -3,6 +3,7 @@ from firebase_admin import credentials, db
 import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import jsonify
 
 app = Flask(__name__, template_folder="templates")  # Replace "templates" with the actual path to your static folder
 CORS(app, resources={r"/*": {"origins": "*"}})

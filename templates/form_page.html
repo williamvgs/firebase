@@ -1,0 +1,77 @@
+<!-- templates/form_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      rel="nofollow"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <title>Submit Form</title>
+  </head>
+  <body>
+    <h1>Submit Form</h1>
+    <form id="submitForm">
+      <label for="eventName">Event Name:</label>
+      <input type="text" id="eventName" name="eventName" required /><br />
+
+      <label for="eventDate">Event Date:</label>
+      <input type="date" id="eventDate" name="eventDate" required /><br />
+
+      <label for="eventAddress">Event Address:</label>
+      <input type="text" id="eventAddress" name="eventAddress" required /><br />
+
+      <label for="eventInfo">Event Info:</label>
+      <textarea id="eventInfo" name="eventInfo" required></textarea><br />
+
+      <input type="submit" value="Submit" />
+    </form>
+
+    <div id="confirmationMessage" style="display: none">
+      <p>Form submitted successfully! Redirecting to index...</p>
+    </div>
+
+    <script>
+      document
+        .getElementById("submitForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Get form data
+          const formData = {
+            eventName: document.getElementById("eventName").value,
+            eventDate: document.getElementById("eventDate").value,
+            eventAddress: document.getElementById("eventAddress").value,
+            eventInfo: document.getElementById("eventInfo").value,
+          };
+
+          // Send the form data to the server
+          fetch("/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Form submitted successfully:", data);
+
+              // Display confirmation message
+              document.getElementById("confirmationMessage").style.display =
+                "block";
+
+              // Redirect to index after 2 seconds
+              setTimeout(function () {
+                window.location.href = "/";
+              }, 2000);
+            })
+            .catch((error) => console.error("Error submitting form:", error));
+        });
+    </script>
+  </body>
+</html>

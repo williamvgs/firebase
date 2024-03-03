@@ -1,0 +1,40 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      rel="nofollow"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Fetch Data Example</title>
+  </head>
+  <body>
+    <h1>hey</h1>
+    <button id="fetchButton">Fetch Data</button>
+    <button onclick="window.location.href='/form_page'">Go to Form Page</button>
+    <div id="displayContainer"></div>
+
+    <script>
+      document
+        .getElementById("fetchButton")
+        .addEventListener("click", function () {
+          fetch("/display")
+            .then((response) => response.json())
+            .then((data) => {
+              // Update the display container with the formatted data
+              let formattedData =
+                "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+              document.getElementById("displayContainer").innerHTML =
+                formattedData;
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+        });
+    </script>
+  </body>
+</html>
