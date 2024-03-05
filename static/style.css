@@ -1,0 +1,22 @@
+.displayContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Display events in a column */
+  }
+  
+  .event-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+  }
+  

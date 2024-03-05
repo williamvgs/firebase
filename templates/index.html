@@ -6,35 +6,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      rel="nofollow"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
+      href="{{ url_for('static', filename='style.css') }}"
     />
-    <link rel="stylesheet" href="style.css" />
+
     <title>Fetch Data Example</title>
   </head>
   <body>
-    <h1>hey</h1>
-    <button id="fetchButton">Fetch Data</button>
-    <button onclick="window.location.href='/form_page'">Go to Form Page</button>
+    <nav>
+      <h1>Events</h1>
+      <button onclick="window.location.href='/form_page'">
+        Go to Form Page
+      </button>
+    </nav>
     <div id="displayContainer"></div>
 
     <script>
-      document
-        .getElementById("fetchButton")
-        .addEventListener("click", function () {
-          fetch("/display")
-            .then((response) => response.json())
-            .then((data) => {
-              // Update the display container with the formatted data
-              let formattedData =
-                "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-              document.getElementById("displayContainer").innerHTML =
-                formattedData;
-            })
-            .catch((error) => console.error("Error fetching data:", error));
-        });
+      // Function to fetch and display data
+      function fetchDataAndDisplay() {
+        fetch("/display")
+          .then((response) => response.json())
+          .then((data) => {
+            // Update the display container with the formatted data
+            let formattedData = formatEventData(data);
+            document.getElementById("displayContainer").innerHTML =
+              formattedData;
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      }
+
+      // Trigger the data fetching and display function when the page loads
+      window.onload = fetchDataAndDisplay;
+
+      function formatEventData(data) {
+        let formattedData = "";
+
+        for (const eventId in data) {
+          const event = data[eventId];
+          formattedData += `<div class="event-container">
+                                <h3>${event.Event || event.eventName}</h3>
+                                <p><strong>Date:</strong> ${
+                                  event.dato || event.eventDate
+                                }</p>
+                                <p><strong>Info:</strong> ${
+                                  event.info || event.eventInfo
+                                }</p>
+                                <p><strong>Address:</strong> ${
+                                  event.Address || event.eventAddress
+                                }</p>
+                              </div>`;
+        }
+
+        return formattedData;
+      }
     </script>
   </body>
 </html>

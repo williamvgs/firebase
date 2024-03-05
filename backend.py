@@ -1,11 +1,10 @@
-# app.py
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_cors import CORS
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize Firebase Admin SDK with service account key and your Firebase project URL
@@ -17,6 +16,27 @@ firebase_admin.initialize_app(cred, {
 # Get a reference to your Firebase Realtime Database
 ref = db.reference('/')
 
+def cleanup_database():
+    # Get all items from the 'Events' node in the database
+    events = ref.child('Events').get()
+
+    # Get today's date
+    today = datetime.date.today().isoformat()
+
+    # Loop through the events and delete those with dates older than today
+    for event_id, event_data in events.items():
+        event_date = event_data.get('dato') or event_data.get('eventDate')
+
+        if event_date and event_date < today:
+            ref.child('Events').child(event_id).delete()
+
+# Schedule the cleanup function to run periodically (for example, daily)
+from apscheduler.schedulers.background import BackgroundScheduler
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(cleanup_database, 'interval', days=1)
+scheduler.start()
+
 @app.route('/')
 def hello_world():
     return render_template('index.html')
@@ -24,22 +44,10 @@ def hello_world():
 @app.route('/display')
 def display_items():
     # Get all items from the 'Events' node in the database
-    events_data = ref.child('Events').get()
+    events = ref.child('Events').get()
 
-    # Format the data similar to your second code snippet
-    formatted_events = []
-    for event_id, event_data in events_data.items():
-        formatted_event = {
-            'event_id': event_id,
-            'dato': event_data.get('dato', ''),
-            'event': event_data.get('Event', ''),
-            'info': event_data.get('info', ''),
-            'klokkeslett': event_data.get('klokkeslett', ''),
-            'sted': event_data.get('Address', ''),
-        }
-        formatted_events.append(formatted_event)
-
-    return render_template('display.html', events=formatted_events)
+    # Pass the events data to the HTML template for rendering
+    return events
 
 @app.route('/form_page')
 def form_page():
