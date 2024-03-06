@@ -61,11 +61,26 @@
     window.onload = fetchDataAndDisplay;
 
     function formatEventData(data) {
+      // Convert the events object to an array
+      const eventsArray = Object.values(data);
+
+      // Sort events by date (day, month, year) in ascending order
+      eventsArray.sort((a, b) => {
+        const dateA = new Date(a.dato);
+        const dateB = new Date(b.dato);
+
+        // Log the parsed dates to the console for debugging
+        console.log("Parsed Date A:", dateA);
+        console.log("Parsed Date B:", dateB);
+
+        // Compare by year, month, and day
+        return dateA - dateB;
+      });
+
       let formattedData = "";
 
-      for (const eventId in data) {
-        const event = data[eventId];
-        const dato = new Date(event.dato);
+      for (const event of eventsArray) {
+        const dato = event.dato;
         formattedData += `<div class="card mb-2 shadow-sm">
           <div id="event-container" class="card-body">
             <h3>${event.Event || event.eventName}</h3>
