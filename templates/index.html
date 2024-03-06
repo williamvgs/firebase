@@ -1,0 +1,84 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>Fetch Data Example</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Events</a>
+        <button
+          onclick="window.location.href='/form_page'"
+          class="btn btn-primary px-5"
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Go to form page
+        </button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="card p-5" id="displayContainer"></div>
+    </div>
+  </body>
+
+  <script>
+    // Function to fetch and display data
+    function fetchDataAndDisplay() {
+      fetch("/display")
+        .then((response) => response.json())
+        .then((data) => {
+          // Update the display container with the formatted data
+          let formattedData = formatEventData(data);
+          document.getElementById("displayContainer").innerHTML = formattedData;
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    }
+
+    // Trigger the data fetching and display function when the page loads
+    window.onload = fetchDataAndDisplay;
+
+    function formatEventData(data) {
+      let formattedData = "";
+
+      for (const eventId in data) {
+        const event = data[eventId];
+        const dato = new Date(event.dato);
+        formattedData += `<div class="card mb-2 shadow-sm">
+          <div id="event-container" class="card-body">
+            <h3>${event.Event || event.eventName}</h3>
+            <p><strong>Date:</strong> ${dato || event.eventDate}</p>
+            <p><strong>Info:</strong> ${event.info || event.eventInfo}</p>
+            <p><strong>Address:</strong> ${
+              event.Address || event.eventAddress
+            }</p>
+          </div>
+        </div>`;
+      }
+
+      return formattedData;
+    }
+  </script>
+</html>
