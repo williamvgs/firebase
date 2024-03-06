@@ -27,7 +27,7 @@
     .then(response => response.json())
     .then(jsonData => {
       // Convert JSON data to a string with indentation
-      var formattedJson = JSON.stringify(jsonData,null, 1);
+      var formattedJson = JSON.stringify(jsonData, null, 1);
 
       // Display the formatted JSON in the <pre> element
       document.getElementById('jsonOutput').textContent = formattedJson;
@@ -37,3 +37,5 @@
 
 </body>
 </html>
+
+
