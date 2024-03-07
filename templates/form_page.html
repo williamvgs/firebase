@@ -31,7 +31,7 @@
         <a class="navbar-brand" href="/">Events</a>
       </div>
     </nav>
-    <div class="container card p-5" id="displayContainer">
+    <div class="container card p-5 shadow-sm" id="displayContainer">
       <form id="submitForm">
         <label for="eventName" class="form-label">Event Name:</label>
         <input
@@ -104,6 +104,9 @@
         .addEventListener("submit", function (event) {
           event.preventDefault();
 
+          // Disable form fields to prevent multiple submissions
+          disableFormFields();
+
           // Get form data
           const formData = {
             eventName: document.getElementById("eventName").value,
@@ -135,8 +138,39 @@
                 window.location.href = "/";
               }, 2000);
             })
-            .catch((error) => console.error("Error submitting form:", error));
+            .catch((error) => {
+              console.error("Error submitting form:", error);
+
+              // Re-enable form fields in case of an error
+              enableFormFields();
+            });
         });
+
+      function disableFormFields() {
+        // Disable form fields
+        document.getElementById("eventName").disabled = true;
+        document.getElementById("eventDate").disabled = true;
+        document.getElementById("startTime").disabled = true;
+        document.getElementById("finishTime").disabled = true;
+        document.getElementById("eventAddress").disabled = true;
+        document.getElementById("eventInfo").disabled = true;
+        document
+          .getElementById("submitForm")
+          .getElementsByTagName("input")[5].disabled = true; // Disable the submit button
+      }
+
+      function enableFormFields() {
+        // Enable form fields
+        document.getElementById("eventName").disabled = false;
+        document.getElementById("eventDate").disabled = false;
+        document.getElementById("startTime").disabled = false;
+        document.getElementById("finishTime").disabled = false;
+        document.getElementById("eventAddress").disabled = false;
+        document.getElementById("eventInfo").disabled = false;
+        document
+          .getElementById("submitForm")
+          .getElementsByTagName("input")[5].disabled = false; // Enable the submit button
+      }
     </script>
   </body>
 </html>

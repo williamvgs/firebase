@@ -65,32 +65,47 @@
 
       for (const eventId in data) {
         const event = data[eventId];
-        const eventDate = new Date(event.dato);
+        const eventDate = new Date(event.start_time);
+        const endDate = new Date(event.finish_time);
 
-        // Format the date and time
-        const options = {
+        // Format the date
+        const optionsDate = {
           weekday: "long",
           year: "numeric",
           month: "long",
           day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          timeZoneName: "short",
         };
 
-        const formattedDate = eventDate.toLocaleDateString("en-US", options);
+        const formattedDate = eventDate.toLocaleDateString(
+          "en-US",
+          optionsDate
+        );
+
+        // Format the time without timezone
+        const optionsTime = {
+          hour: "numeric",
+          minute: "numeric",
+        };
+
+        const formattedTime = eventDate.toLocaleTimeString(
+          "en-US",
+          optionsTime
+        );
+        const formattedEndTime = endDate.toLocaleTimeString(
+          "en-US",
+          optionsTime
+        );
 
         formattedData += `<div class="card mb-2 shadow-sm">
           <div id="event-container" class="card-body">
             <h3>${event.Event || event.eventName}</h3>
-            <p><strong>Date:</strong> ${formattedDate || event.eventDate}</p>
+            <p><strong>Date:</strong> ${formattedDate || "Invalid Date"}</p>
             <p><strong>Info:</strong> ${event.info || event.eventInfo}</p>
             <p><strong>Start Time:</strong> ${
-              event.startTime || "Not specified"
+              formattedTime || "Not specified"
             }</p>
             <p><strong>End Time:</strong> ${
-              event.finishTime || "Not specified"
+              formattedEndTime || "Not specified"
             }</p>
             <p><strong>Address:</strong> ${
               event.Address || event.eventAddress
