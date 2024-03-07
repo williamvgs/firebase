@@ -61,31 +61,37 @@
     window.onload = fetchDataAndDisplay;
 
     function formatEventData(data) {
-      // Convert the events object to an array
-      const eventsArray = Object.values(data);
-
-      // Sort events by date (day, month, year) in ascending order
-      eventsArray.sort((a, b) => {
-        const dateA = new Date(a.dato);
-        const dateB = new Date(b.dato);
-
-        // Log the parsed dates to the console for debugging
-        console.log("Parsed Date A:", dateA);
-        console.log("Parsed Date B:", dateB);
-
-        // Compare by year, month, and day
-        return dateA - dateB;
-      });
-
       let formattedData = "";
 
-      for (const event of eventsArray) {
-        const dato = event.dato;
+      for (const eventId in data) {
+        const event = data[eventId];
+        const eventDate = new Date(event.dato);
+
+        // Format the date and time
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          timeZoneName: "short",
+        };
+
+        const formattedDate = eventDate.toLocaleDateString("en-US", options);
+
         formattedData += `<div class="card mb-2 shadow-sm">
           <div id="event-container" class="card-body">
             <h3>${event.Event || event.eventName}</h3>
-            <p><strong>Date:</strong> ${dato || event.eventDate}</p>
+            <p><strong>Date:</strong> ${formattedDate || event.eventDate}</p>
             <p><strong>Info:</strong> ${event.info || event.eventInfo}</p>
+            <p><strong>Start Time:</strong> ${
+              event.startTime || "Not specified"
+            }</p>
+            <p><strong>End Time:</strong> ${
+              event.finishTime || "Not specified"
+            }</p>
             <p><strong>Address:</strong> ${
               event.Address || event.eventAddress
             }</p>

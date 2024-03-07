@@ -51,6 +51,24 @@
           required
         /><br />
 
+        <label for="startTime" class="form-label">Start Time:</label>
+        <input
+          type="time"
+          id="startTime"
+          name="startTime"
+          class="form-control w-25"
+          required
+        /><br />
+
+        <label for="finishTime" class="form-label">Finish Time:</label>
+        <input
+          type="time"
+          id="finishTime"
+          name="finishTime"
+          class="form-control w-25"
+          required
+        /><br />
+
         <label for="eventAddress">Event Address:</label>
         <input
           type="text"
@@ -77,6 +95,9 @@
       <p>Form submitted successfully! Redirecting to index...</p>
     </div>
 
+    <!-- templates/form_page.html -->
+    <!-- ... (your existing HTML code) ... -->
+
     <script>
       document
         .getElementById("submitForm")
@@ -87,6 +108,8 @@
           const formData = {
             eventName: document.getElementById("eventName").value,
             eventDate: document.getElementById("eventDate").value,
+            startTime: document.getElementById("startTime").value,
+            finishTime: document.getElementById("finishTime").value,
             eventAddress: document.getElementById("eventAddress").value,
             eventInfo: document.getElementById("eventInfo").value,
           };
